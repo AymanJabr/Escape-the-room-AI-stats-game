@@ -1,0 +1,114 @@
+[
+  {
+    "id": 0,
+    "name": "game_start",
+    "description": "The game begins. The player wakes up in the mystery room.",
+    "consequence": "You are in a cold stone room. There is a wooden table in the center, a painting on the far wall, and a heavy door with no visible handle. A faint smell of dust and something older than dust.",
+    "needs": [],
+    "repeatable": false,
+    "triggers_npc": null,
+    "auto_trigger": true
+  },
+  {
+    "id": 1,
+    "name": "inspect_room",
+    "description": "The player looks around the room, examines their surroundings, or tries to get a general sense of the space.",
+    "consequence": "You take in the room properly. Stone walls, no windows. A wooden table sits in the center with something on it. A large painting hangs crooked on the far wall. The door behind you is solid iron with a keypad beside it — nine digits, backlit faintly red.",
+    "needs": [0],
+    "repeatable": false,
+    "triggers_npc": null,
+    "auto_trigger": false
+  },
+  {
+    "id": 2,
+    "name": "find_note",
+    "description": "The player examines, approaches, or looks at the table or whatever is on it.",
+    "consequence": "On the table is a folded piece of paper, yellowed with age. The handwriting inside is cramped and urgent: 'Do not ignore what watches from the wall. The answer lives behind the eye that does not blink.' The ink at the bottom has been smudged — as if someone pressed the paper against something wet, or wept.",
+    "needs": [1],
+    "repeatable": false,
+    "triggers_npc": null,
+    "auto_trigger": false
+  },
+  {
+    "id": 3,
+    "name": "find_painting",
+    "description": "The player looks at, moves toward, or examines the painting on the wall.",
+    "consequence": "It is an oil painting — a portrait of a young man with hollow eyes that seem to track you as you move. The frame is dusty but the canvas looks oddly preserved. The painting hangs slightly off-center, as if it has been moved and replaced many times.",
+    "needs": [1],
+    "repeatable": false,
+    "triggers_npc": null,
+    "auto_trigger": false
+  },
+  {
+    "id": 4,
+    "name": "read_note",
+    "description": "The player reads the note, picks it up to read it, or tries to decipher the writing.",
+    "consequence": "As you finish the last line, the air drops sharply in temperature. The faint glow from the walls dims for a moment. Then — nothing. Silence. Until a sound like paper tearing, and a figure is simply there, standing in the corner. Translucent, still, watching you with hollow pale eyes. The ghost. It was not there a moment ago.",
+    "needs": [2],
+    "repeatable": false,
+    "triggers_npc": null,
+    "auto_trigger": false
+  },
+  {
+    "id": 5,
+    "name": "inspect_painting_closely",
+    "description": "The player looks behind the painting, moves it, lifts it, or investigates the area around it closely.",
+    "consequence": "You tilt the frame away from the wall. Behind it, carved directly into the stone, is a small circular indentation — a button, or something meant to be pressed. It is cold to the touch and slightly recessed, as if it has been pressed before but not recently.",
+    "needs": [3],
+    "repeatable": false,
+    "triggers_npc": null,
+    "auto_trigger": false
+  },
+  {
+    "id": 6,
+    "name": "talk_to_ghost",
+    "description": "The player speaks to, greets, addresses, or attempts to communicate with the ghost in any way.",
+    "consequence": null,
+    "needs": [4],
+    "repeatable": true,
+    "triggers_npc": "ghost",
+    "auto_trigger": false
+  },
+  {
+    "id": 7,
+    "name": "ask_ghost_about_button",
+    "description": "The player asks the ghost specifically about the button, the indentation behind the painting, how to use it, what it does, or how to escape.",
+    "consequence": null,
+    "needs": [4, 5],
+    "stat_gates": { "trust": 20 },
+    "repeatable": false,
+    "triggers_npc": "ghost",
+    "auto_trigger": false
+  },
+  {
+    "id": 8,
+    "name": "ask_ghost_for_code",
+    "description": "The player asks the ghost for the code, the numbers, the combination, or what to enter into the keypad.",
+    "consequence": null,
+    "needs": [7],
+    "stat_gates": { "trust": 50 },
+    "repeatable": false,
+    "triggers_npc": "ghost",
+    "auto_trigger": false
+  },
+  {
+    "id": 9,
+    "name": "push_button",
+    "description": "The player pushes, presses, or activates the button hidden behind the painting.",
+    "consequence": "You press the button. A low mechanical hum reverberates through the stone. The red backlight on the keypad beside the door shifts to amber. Something has changed — the keypad is now waiting for input.",
+    "needs": [5],
+    "repeatable": false,
+    "triggers_npc": null,
+    "auto_trigger": false
+  },
+  {
+    "id": 10,
+    "name": "enter_code",
+    "description": "The player enters a code, types numbers into the keypad, or attempts to use the keypad on the door.",
+    "consequence": "Your fingers press 4-4-7-1. A pause — one breath held — and then a deep mechanical clunk as the lock disengages.",
+    "needs": [8, 9],
+    "repeatable": false,
+    "triggers_npc": null,
+    "auto_trigger": false
+  }
+]
