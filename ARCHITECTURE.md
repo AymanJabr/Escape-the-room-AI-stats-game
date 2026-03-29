@@ -90,13 +90,15 @@ TRUST stat (Ghost NPC — escape room)
 
   0 ─────────────── 20 ─────────────── 50 ─────────────── 100
   │                  │                  │                   │
-  Tier 0             Tier 1             Tier 2              Tier 3
-  "cryptic,          "reluctant,        "helpful,           "fully
-  speaks in          gives vague        gives direct        cooperative,
-  riddles"           directions"        clues"              reveals all"
+  Tier 0             Tier 1             Tier 2
+  "cryptic,          "gives cryptic     "speaks plainly,
+  speaks in          digit hints,       reveals full
+  riddles only"      withholds order"   code on request"
 
-Each interaction: delta ∈ {-5, -4, -3, -2, -1, 0, +1, +2, +3, +4, +5}
-Crossing 20 → NPC persona switches, new graph nodes may unlock
+Tier 0: delta ∈ [-5, +5]
+Tier 1: delta ∈ [-3, +10]
+Tier 2: delta ∈ [-2, +15]
+Crossing 20 → persona switches, stat-gated graph nodes unlock
 ```
 
 When a checkpoint is crossed:
@@ -185,6 +187,7 @@ state/
 - Does NOT have access to `modify_stat`
 - Keeps player grounded in the world ("your action has no effect") without being dismissive
 - Also handles consequence narration when there's no NPC involved (environment interactions)
+- On "no_match", receives a **discovered-state context**: a summary of everything the player has already found (built from completed nodes' consequence text). This prevents the GM from contradicting visible objects or saying "nothing new" when unexplored things are still present.
 
 ---
 
@@ -194,7 +197,8 @@ state/
 |---|---|
 | Skip ahead in the story | Consequence text is never in context until triggered |
 | Reveal future secrets | Full graph never passed to any agent |
-| Give +50 love in one message | Tool schema rejects delta > 5; backend clamps anyway |
+| Give +50 love in one message | Tool schema rejects delta > tier max; backend clamps anyway |
 | Re-trigger a completed action | Filtered out of available actions list |
 | Ignore stat gates | Backend enforces — node never appears in classifier context |
 | Pretend a stat is higher | Stats only come from game_state.json, not from model |
+| Say "nothing is here" when objects exist | GM receives discovered-state context grounding it in found objects |

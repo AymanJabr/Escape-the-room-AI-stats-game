@@ -2,7 +2,7 @@
   "story_id": "escape_room",
   "title": "The Mystery Room",
   "description": "You wake up in a strange room with no memory of how you got here. Find a way out.",
-  "opening_narration": "You open your eyes. The room is dim, lit only by a faint phosphorescent glow from the walls. Stone, old wood, and silence. You have no memory of how you arrived here — but every instinct tells you to find a way out.",
+  "opening_narration": "You open your eyes. The room is dim, lit only by a faint phosphorescent glow from the walls. Stone, old wood, and silence. You have no memory of how you arrived here — but every instinct tells you to find a way out. You see an old wodden table in the center of the room, and a what looks to be a painting on the wall.",
   "win_action_id": 10,
   "win_narration": "A deep mechanical clunk reverberates through the walls as the lock disengages. The heavy door swings open with a groan, and pale grey light spills in from beyond. You step through without looking back. Whatever brought you to this place, it's behind you now.",
   "stats": {
@@ -11,7 +11,12 @@
       "min": 0,
       "max": 100,
       "checkpoints": [20, 50],
-      "display_name": "Ghost's Trust"
+      "display_name": "Ghost's Trust",
+      "tier_bounds": [
+        {"tier": 0, "min_delta": -5, "max_delta": 5},
+        {"tier": 1, "min_delta": -3, "max_delta": 10},
+        {"tier": 2, "min_delta": -2, "max_delta": 15}
+      ]
     }
   }
 }

@@ -61,6 +61,7 @@ Each agent is a thin wrapper: builds a prompt, calls Haiku, parses output.
 
 - [ ] `agents/game_master.py`
   - Input: player message + context (no_match or consequence narration)
+  - On no_match: also receives discovered-state context from backend to ground responses
   - No tools
   - Handles both: "no effect" responses and scene consequence narration
 
@@ -108,17 +109,17 @@ Each agent is a thin wrapper: builds a prompt, calls Haiku, parses output.
  │    │    └── [4] Read the note → spawns Ghost (needs: 2)
  │    └── [3] Find the painting on the wall (needs: 1)
  │         └── [5] Inspect the painting → reveals hidden button (needs: 3)
- ├── [6] Ask Ghost for help (needs: 4, stat_gate: trust >= 0)
- │    └── [7] Ask Ghost about the button (needs: 4,5, stat_gate: trust >= 20)
- │         └── [8] Ask Ghost the escape code (needs: 7, stat_gate: trust >= 50)
- └── [9] Push the button (needs: 5)
-      └── [10] Enter the code (needs: 8,9) ← WIN CONDITION
+ │              └── [6] Push the button → activates keypad (needs: 5)
+ │                   └── [10] Enter the code (needs: 6, 9) ← WIN CONDITION
+ ├── [7] Talk to Ghost (needs: 4, 6, repeatable)
+ ├── [8] Ask Ghost for code hints (needs: 4, 5, stat_gate: trust >= 20)
+ └── [9] Ask Ghost for the full code (needs: 4, 5, stat_gate: trust >= 50)
 ```
 
 Ghost trust tiers:
-- **0–19**: Cryptic. Speaks in riddles. Won't answer direct questions.
-- **20–49**: Reluctant. Vague directions. References the button.
-- **50+**: Cooperative. Will reveal the code if asked directly.
+- **0–19**: Cryptic. Speaks only in riddles and fragments. Gives no useful information.
+- **20–49**: Partial. Confirms there are four numbers. Gives cryptic hints about each digit. Will not give the sequence — tells the player more trust is needed.
+- **50+**: Cooperative. Speaks plainly. Will reveal the full code if asked directly.
 
 ### Win Condition
 Action 10 "Enter the code" completes → game master prints ending scene → exit.

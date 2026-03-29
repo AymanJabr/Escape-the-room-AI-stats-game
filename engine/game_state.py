@@ -10,8 +10,10 @@ class GameState:
     story_id: str
     completed_actions: set[int] = field(default_factory=set)
     stats: dict[str, int] = field(default_factory=dict)
-    # Tracks which persona tier each NPC is currently on, so we can detect changes
+    # Tracks which persona tier each NPC is currently on
     active_persona_tiers: dict[str, int] = field(default_factory=dict)
+    # Tracks which NPCs the player has spoken to (persisted across sessions)
+    interacted_npcs: set[str] = field(default_factory=set)
 
 
 def load_state(story_id: str, config: dict) -> GameState:
@@ -25,8 +27,8 @@ def load_state(story_id: str, config: dict) -> GameState:
             completed_actions=set(data["completed_actions"]),
             stats=data["stats"],
             active_persona_tiers=data["active_persona_tiers"],
+            interacted_npcs=set(data.get("interacted_npcs", [])),
         )
-    # Fresh game: initialise stats from config starting values
     stats = {name: cfg["starting_value"] for name, cfg in config["stats"].items()}
     return GameState(story_id=story_id, stats=stats)
 
@@ -39,6 +41,7 @@ def save_state(state: GameState) -> None:
         "completed_actions": sorted(state.completed_actions),
         "stats": state.stats,
         "active_persona_tiers": state.active_persona_tiers,
+        "interacted_npcs": sorted(state.interacted_npcs),
     }
     with open(path, "w") as f:
         json.dump(data, f, indent=2)
@@ -48,8 +51,11 @@ def mark_action_complete(state: GameState, action_id: int) -> None:
     state.completed_actions.add(action_id)
 
 
+def mark_npc_interacted(state: GameState, npc_id: str) -> None:
+    state.interacted_npcs.add(npc_id)
+
+
 def reset_state(story_id: str) -> None:
-    """Delete saved state so the next load starts fresh."""
     path = STATE_DIR / f"{story_id}.json"
     if path.exists():
         path.unlink()

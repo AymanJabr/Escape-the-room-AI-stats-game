@@ -45,11 +45,19 @@ def narrate_consequence(consequence: str, player_message: str) -> str:
     return response.content[0].text.strip()
 
 
-def narrate_no_effect(player_message: str) -> str:
+def narrate_no_effect(player_message: str, room_context: str = "") -> str:
     """
     Respond to a player action that matched nothing in the game world.
     Should feel natural and in-world — not an error message.
+    room_context grounds the response in what the player has already found,
+    preventing the GM from contradicting or ignoring visible objects.
     """
+    context_block = (
+        f"\n\n{room_context}\n\nUse this to stay consistent with what exists in the room. "
+        "If the player is looking around or asking about the room, acknowledge what they have already found "
+        "and subtly draw attention to anything still unexplored — but never invent new details."
+    ) if room_context else ""
+
     response = client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=256,
@@ -58,7 +66,7 @@ def narrate_no_effect(player_message: str) -> str:
             "The player has just done or said something with no meaningful effect. "
             "Describe the stillness, the lack of result, or the room's indifference. "
             "Vary your phrasing — do not repeat the same line. "
-            "1–2 sentences only."
+            f"1–2 sentences only.{context_block}"
         ),
         messages=[
             {

@@ -32,7 +32,7 @@ A directed graph of story nodes. Each node is an "impactful action" with:
 - **Prerequisites** (prior actions that must be done first)
 - Optional **stat gates** (a stat must reach a threshold before this node is even available)
 
-The player can say anything. A classifier agent silently checks if what they said matches an available action. If not, the game master tells them their action had no effect and the story doesn't advance.
+The player can say anything. A classifier agent silently checks if what they said matches an available action. If not, the game master tells them their action had no effect and the story doesn't advance. The game master also receives a **discovered-state context** — a summary of everything the player has already found — so it stays grounded in the room and doesn't contradict visible objects.
 
 ### 2. Stat System
 Characters have stats (e.g. `trust`, `love`, `suspicion`). After each NPC interaction, an agent evaluates the exchange and calls a `modify_stat` tool — but the tool schema enforces a hard cap of **±5 per interaction**. The backend clamps and validates this before applying it.
@@ -62,7 +62,7 @@ Stories live in `stories/<story-name>/` and consist of three JSON files:
 - `config.json` — story settings (which stats exist, starting values, etc.)
 
 ### Current stories
-- **escape_room** — based on Jacky Kaub's mystery room. Player is locked in a room and must find the exit. The ghost NPC has a `trust` stat that gates how useful its hints are.
+- **escape_room** — based on Jacky Kaub's mystery room. Player is locked in a room and must find the exit. The ghost NPC has a `trust` stat that gates how useful its hints are. At low trust it speaks only in riddles. At medium trust it gives cryptic hints about the code digits but withholds the sequence. At high trust it speaks plainly and reveals the full code.
 
 ---
 
@@ -89,12 +89,12 @@ cp .env.example .env
 
 Run the game:
 ```bash
-python main.py --story escape_room
+python3 main.py --story escape_room
 ```
 
 To wipe progress and restart:
 ```bash
-python main.py --story escape_room --reset
+python3 main.py --story escape_room --reset
 ```
 
 ---

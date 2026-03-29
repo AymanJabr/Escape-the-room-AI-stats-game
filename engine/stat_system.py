@@ -1,7 +1,5 @@
 from dataclasses import dataclass, field
 
-MAX_DELTA = 5
-
 
 @dataclass
 class Stat:
@@ -29,13 +27,27 @@ def get_tier(stat: Stat) -> int:
     return tier
 
 
-def apply_delta(stat: Stat, delta: int) -> tuple[int, int, int]:
+def get_tier_bounds(stat_config: dict, tier: int) -> tuple[int, int]:
     """
-    Apply a stat change. Delta is clamped to [-MAX_DELTA, +MAX_DELTA].
+    Returns (min_delta, max_delta) for the given tier.
+    Reads from the stat config's tier_bounds list.
+    Falls back to ±5 if tier_bounds is not defined.
+    """
+    for tb in stat_config.get("tier_bounds", []):
+        if tb["tier"] == tier:
+            return tb["min_delta"], tb["max_delta"]
+    return -5, 5
+
+
+def apply_delta(
+    stat: Stat, delta: int, min_delta: int = -5, max_delta: int = 5
+) -> tuple[int, int, int]:
+    """
+    Apply a stat change clamped to [min_delta, max_delta].
     Mutates stat.current_value in place.
     Returns (new_value, old_tier, new_tier).
     """
-    delta = max(-MAX_DELTA, min(MAX_DELTA, delta))
+    delta = max(min_delta, min(max_delta, delta))
     old_tier = get_tier(stat)
     new_value = max(stat.min_val, min(stat.max_val, stat.current_value + delta))
     stat.current_value = new_value

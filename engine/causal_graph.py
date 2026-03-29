@@ -15,6 +15,8 @@ class Node:
     triggers_npc: Optional[str]
     auto_trigger: bool
     stat_gates: dict[str, int] = field(default_factory=dict)
+    milestone_label: Optional[str] = None
+    hint: Optional[str] = None
 
 
 def load_graph(story_path: Path) -> list[Node]:
@@ -31,6 +33,8 @@ def load_graph(story_path: Path) -> list[Node]:
             triggers_npc=n.get("triggers_npc"),
             auto_trigger=n.get("auto_trigger", False),
             stat_gates=n.get("stat_gates", {}),
+            milestone_label=n.get("milestone_label"),
+            hint=n.get("hint"),
         )
         for n in data
     ]
