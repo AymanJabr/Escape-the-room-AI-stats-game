@@ -8,6 +8,22 @@ Inspired by [Jacky Kaub's causal graph approach](https://towardsdatascience.com/
 
 ---
 
+## Screenshots
+
+**Start of game**
+![Start of game](images/start_of_game.png)
+
+**Status screen**
+![Status screen](images/status.png)
+
+**Ghost losing trust**
+![Ghost losing trust](images/ghost_losing_trust.png)
+
+**End of game**
+![End of game](images/end_of_game.png)
+
+---
+
 ## What makes this different
 
 | Classical game (Twine/Renpy) | AI chat game (SillyTavern) | This engine |
